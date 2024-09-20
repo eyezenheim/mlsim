@@ -20,9 +20,9 @@ if os.getenv("IMAGE", None) is None:
 import onnx
 import numpy as np
 
-from tinygrad.jit import TinyJit
+from tinygrad.engine.jit import TinyJit
 from tinygrad.tensor import Tensor
-from tinygrad.helpers import dtypes
+from tinygrad.dtype import dtypes
 from extra.onnx import get_run_onnx
 from openpilot.selfdrive.modeld.runners.runmodel_pyx import RunModel
 
