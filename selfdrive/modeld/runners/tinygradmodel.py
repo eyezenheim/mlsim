@@ -1,5 +1,6 @@
 import os
 import sys
+import pickle
 from pathlib import Path
 
 OPENPILOT_ROOT = Path(__file__).parent.parent.parent.parent
@@ -19,12 +20,8 @@ if os.getenv("IMAGE", None) is None:
 
 import onnx
 import numpy as np
-
-from tinygrad.engine.jit import TinyJit
 from tinygrad.tensor import Tensor
 from tinygrad.dtype import dtypes
-from extra.onnx import get_run_onnx
-from openpilot.selfdrive.modeld.runners.runmodel_pyx import RunModel
 
 ONNX_TYPES_TO_NP_TYPES: dict[int, np.dtype] = {
   i: onnx.helper.tensor_dtype_to_np_dtype(i)
@@ -32,24 +29,21 @@ ONNX_TYPES_TO_NP_TYPES: dict[int, np.dtype] = {
     if dtype in ['FLOAT', 'FLOAT16', 'INT64', 'INT32', 'UINT8']
 }
 
-@TinyJit
-def model_exec(run_onnx, **inputs):
-  return next(iter(run_onnx(inputs).values())).cast(dtypes.float32).realize()
 
-
-class TinygradModel(RunModel):
-  def __init__(self, path, output, runtime, use_tf8, cl_context):
+class TinygradModel(object):
+  def __init__(self, onnx_path, pkl_path, output):
     self.inputs = {}
     self.output = output
-    self.use_tf8 = use_tf8
 
     Tensor.manual_seed(1337)
     Tensor.no_grad = True
 
-    onnx_model = onnx.load(path)
-    self.run_onnx = get_run_onnx(onnx_model)
+    onnx_model = onnx.load(onnx_path)
+    with open(pkl_path, "rb") as f:
+      self.run = pickle.load(f)
     self.input_shapes = {inp.name:tuple(x.dim_value for x in inp.type.tensor_type.shape.dim) for inp in onnx_model.graph.input}
     self.input_dtypes = {inp.name: ONNX_TYPES_TO_NP_TYPES[inp.type.tensor_type.elem_type] for inp in onnx_model.graph.input}
+
 
   def addInput(self, name, buffer):
     assert name in self.input_shapes
@@ -63,11 +57,10 @@ class TinygradModel(RunModel):
     return None
 
   def execute(self):
-    inputs = {k: (v.view(np.uint8) / 255. if self.use_tf8 and k == 'input_img' else v) for k,v in self.inputs.items()}
-    inputs = {k: v.reshape(self.input_shapes[k]).astype(self.input_dtypes[k]) for k,v in inputs.items()}
+    inputs = {k: v.reshape(self.input_shapes[k]).astype(self.input_dtypes[k]) for k,v in self.inputs.items()}
     inputs = {k: Tensor(v) for k,v in inputs.items()}
-    outputs = model_exec(self.run_onnx, **inputs)
-    self.output[:] = outputs.numpy()
+    outputs = self.run(**inputs)
+    self.output[:] = outputs['outputs'].numpy()
     return self.output
 
 
@@ -79,6 +72,7 @@ if __name__ == "__main__":
   from openpilot.selfdrive.modeld.models.commonmodel_pyx import CLContext
 
   MODEL_PATH = Path(__file__).parent.parent / 'models/supercombo.onnx'
+  MODEL_PKL_PATH = Path(__file__).parent.parent / 'models/supercombo.pkl'
   METADATA_PATH = Path(__file__).parent.parent / 'models/supercombo_metadata.pkl'
   with open(METADATA_PATH, 'rb') as f:
     model_metadata = pickle.load(f)
@@ -86,7 +80,7 @@ if __name__ == "__main__":
   net_output_size = model_metadata['output_shapes']['outputs'][1]
   output = np.zeros(net_output_size, dtype=np.float32)
 
-  model = TinygradModel(MODEL_PATH, output, Runtime.CPU, False, CLContext())
+  model = TinygradModel(MODEL_PATH, MODEL_PKL_PATH)
 
   inputs = {
     'input_imgs': np.zeros(128 * 256 * 12, dtype=np.uint8),

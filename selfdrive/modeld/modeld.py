@@ -19,19 +19,18 @@ from openpilot.common.transformations.model import get_warp_matrix
 from openpilot.system import sentry
 from openpilot.selfdrive.car.card import convert_to_capnp
 from openpilot.selfdrive.controls.lib.desire_helper import DesireHelper
-from openpilot.selfdrive.modeld.runners import ModelRunner, Runtime
 from openpilot.selfdrive.modeld.parse_model_outputs import Parser
 from openpilot.selfdrive.modeld.fill_model_msg import fill_model_msg, fill_pose_msg, PublishState
 from openpilot.selfdrive.modeld.constants import ModelConstants
 from openpilot.selfdrive.modeld.models.commonmodel_pyx import ModelFrame, CLContext
+from openpilot.selfdrive.modeld.runners.tinygradmodel import TinygradModel
 
 PROCESS_NAME = "selfdrive.modeld.modeld"
 SEND_RAW_PRED = os.getenv('SEND_RAW_PRED')
 
-MODEL_PATHS = {
-  ModelRunner.TINYGRAD: Path(__file__).parent / 'models/supercombo.onnx',
-  ModelRunner.ONNX: Path(__file__).parent / 'models/supercombo.onnx'}
 
+MODEL_PATH = Path(__file__).parent / 'models/supercombo.onnx'
+MODEL_PKL_PATH = Path(__file__).parent / 'models/supercombo.pkl'
 METADATA_PATH = Path(__file__).parent / 'models/supercombo_metadata.pkl'
 
 class FrameMeta:
@@ -49,7 +48,7 @@ class ModelState:
   inputs: dict[str, np.ndarray]
   output: np.ndarray
   prev_desire: np.ndarray  # for tracking the rising edge of the pulse
-  model: ModelRunner
+  model: TinygradModel
 
   def __init__(self, context: CLContext):
     self.frame = ModelFrame(context)
@@ -71,7 +70,8 @@ class ModelState:
     self.output = np.zeros(net_output_size, dtype=np.float32)
     self.parser = Parser()
 
-    self.model = ModelRunner(MODEL_PATHS, self.output, Runtime.GPU, False, context)
+    self.model = TinygradModel(MODEL_PATH, MODEL_PKL_PATH, self.output)
+
     self.model.addInput("input_imgs", None)
     self.model.addInput("big_input_imgs", None)
     for k,v in self.inputs.items():
