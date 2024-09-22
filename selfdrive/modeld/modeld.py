@@ -29,7 +29,8 @@ PROCESS_NAME = "selfdrive.modeld.modeld"
 SEND_RAW_PRED = os.getenv('SEND_RAW_PRED')
 
 MODEL_PATHS = {
-  ModelRunner.TINYGRAD: Path(__file__).parent / 'models/supercombo.onnx'}
+  ModelRunner.TINYGRAD: Path(__file__).parent / 'models/supercombo.onnx',
+  ModelRunner.ONNX: Path(__file__).parent / 'models/supercombo.onnx'}
 
 METADATA_PATH = Path(__file__).parent / 'models/supercombo_metadata.pkl'
 
