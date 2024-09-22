@@ -80,7 +80,7 @@ if __name__ == "__main__":
   net_output_size = model_metadata['output_shapes']['outputs'][1]
   output = np.zeros(net_output_size, dtype=np.float32)
 
-  model = TinygradModel(MODEL_PATH, MODEL_PKL_PATH)
+  model = TinygradModel(MODEL_PATH, MODEL_PKL_PATH, output)
 
   inputs = {
     'input_imgs': np.zeros(128 * 256 * 12, dtype=np.uint8),
