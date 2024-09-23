@@ -661,19 +661,23 @@ FW_VERSIONS = {
       b'57114-TJB-A030\x00\x00',
       b'57114-TJB-A040\x00\x00',
       b'57114-TJB-A120\x00\x00',
+      b'\x0b42280009191\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.fwdRadar, 0x18dab0f1, None): [
       b'36802-TJB-A040\x00\x00',
       b'36802-TJB-A050\x00\x00',
       b'36802-TJB-A540\x00\x00',
+      b'\x0e046424071847F8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.fwdCamera, 0x18dab5f1, None): [
       b'36161-TJB-A040\x00\x00',
       b'36161-TJB-A530\x00\x00',
+      b'\x0e41102407170221\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.shiftByWire, 0x18da0bf1, None): [
       b'54008-TJB-A520\x00\x00',
       b'54008-TJB-A530\x00\x00',
+      b'\x1211285314204B101380\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.transmission, 0x18da1ef1, None): [
       b'28102-5YK-A610\x00\x00',
@@ -685,29 +689,40 @@ FW_VERSIONS = {
       b'28102-5YL-A620\x00\x00',
       b'28102-5YL-A700\x00\x00',
       b'28102-5YL-A711\x00\x00',
+      b'\x10T5YKA21H1935114N\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.srs, 0x18da53f1, None): [
       b'77959-TJB-A040\x00\x00',
       b'77959-TJB-A120\x00\x00',
       b'77959-TJB-A210\x00\x00',
+      b'\x0bC2NC02MR82O\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.electricBrakeBooster, 0x18da2bf1, None): [
       b'46114-TJB-A040\x00\x00',
       b'46114-TJB-A050\x00\x00',
       b'46114-TJB-A060\x00\x00',
       b'46114-TJB-A120\x00\x00',
+      b'\x0b42076627110\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.gateway, 0x18daeff1, None): [
       b'38897-TJB-A040\x00\x00',
       b'38897-TJB-A110\x00\x00',
       b'38897-TJB-A120\x00\x00',
       b'38897-TJB-A220\x00\x00',
+      b'\x0cR1761113\x00\x00\x00\x00                  ',
     ],
     (Ecu.eps, 0x18da30f1, None): [
       b'39990-TJB-A030\x00\x00',
       b'39990-TJB-A040\x00\x00',
       b'39990-TJB-A070\x00\x00',
       b'39990-TJB-A130\x00\x00',
+      b'\r CB4B284430C\x10                 ',
+    ],
+    (Ecu.programmedFuelInjection, 0x18DA10F1, None): [
+      b'\x0bM4272110558\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
+    ],
+    (Ecu.combinationMeter, 0x18DA60F1, None): [
+      b'\x18R2260002\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
   },
   CAR.HONDA_RIDGELINE: {
