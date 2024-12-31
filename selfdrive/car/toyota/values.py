@@ -207,7 +207,7 @@ class CAR(Platforms):
       ToyotaCarDocs("Toyota RAV4 2016", "Toyota Safety Sense P"),
       ToyotaCarDocs("Toyota RAV4 2017-18")
     ],
-    CarSpecs(mass=3650. * CV.LB_TO_KG, wheelbase=2.65, steerRatio=16.88, tireStiffnessFactor=0.5533),
+    CarSpecs(mass=3650. * CV.LB_TO_KG, wheelbase=2.65, steerRatio=19.33, tireStiffnessFactor=0.5533),
     dbc_dict('toyota_new_mc_pt_generated', 'toyota_adas'),
   )
   TOYOTA_RAV4H = PlatformConfig(
@@ -225,7 +225,7 @@ class CAR(Platforms):
       ToyotaCarDocs("Toyota RAV4 2019-21", video_link="https://www.youtube.com/watch?v=wJxjDd42gGA"),
       ToyotaCarDocs("Toyota RAV4 Hybrid 2019-21"),
     ],
-    CarSpecs(mass=3585. * CV.LB_TO_KG, wheelbase=2.68986, steerRatio=14.3, tireStiffnessFactor=0.7933),
+    CarSpecs(mass=3585. * CV.LB_TO_KG, wheelbase=2.68986, steerRatio=19.33, tireStiffnessFactor=0.7933),
   )
   TOYOTA_RAV4_TSS2_2022 = ToyotaTSS2PlatformConfig(
     [
